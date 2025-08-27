@@ -79,6 +79,7 @@ if (serviceIdObj instanceof Integer) {
        newbooking.setStatus("pending");
        newbooking.setBookingdatetime(LocalDateTime.now());
        newbooking.setPaymentStatus("pending");
+       newbooking.setBookingDetails((String)request.get("notes"));
        bookingRepository.save(newbooking);
 
 
