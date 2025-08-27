@@ -9,7 +9,6 @@ import com.setu.setu.models.services;
 
 public interface servicereposiratory extends JpaRepository<services, Long> {
     List<services> findByServiceProvider_Id(Long serviceProviderId);
-    Optional<services> findById(Long id);
     void deleteById(Long id);
 
     List<services> findByStatus(String status);

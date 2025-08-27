@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.setu.setu.services.bookingsservices;
 import com.setu.setu.services.servicesservice;
 
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +21,8 @@ import java.util.Map;
 public class UserController {
     @Autowired
     private servicesservice servicesservice;
+    @Autowired
+    private bookingsservices bookingsservices;
 
     @PostMapping("/me")
     public ResponseEntity<?> postMethodName(@RequestBody Map<String,Object> entity) {
@@ -28,7 +31,14 @@ public class UserController {
         return servicesservice.getActiveServices();
     }
     
+    
+
+    @PostMapping("/book")
+    public ResponseEntity<?> bookService(@RequestBody Map<String,Object> entity) {
+        return bookingsservices.bookService(entity);
     }
+}
+    
 
     
 

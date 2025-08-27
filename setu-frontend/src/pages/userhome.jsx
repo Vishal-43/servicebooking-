@@ -202,16 +202,269 @@ const GlobalStyles = () => (
       .action-button:hover {
         background-color: #e69d00;
       }
+      /* Modal Styles */
+      .modal-backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+      }
+      .modal-content {
+        background-color: var(--color-pure-white);
+        padding: 2rem;
+        border-radius: 1rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        max-width: 500px;
+        width: 90%;
+        max-height: 90vh;
+        overflow-y: auto;
+        position: relative;
+      }
+      .modal-close-button {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: var(--color-medium-slate);
+      }
+      .modal-close-button:hover {
+        color: var(--color-deep-slate);
+      }
+      .modal-title {
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        color: var(--color-setu-blue);
+      }
+      .modal-form-group {
+        margin-bottom: 1rem;
+        text-align: left;
+      }
+      .modal-form-label {
+        display: block;
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: var(--color-medium-slate);
+        margin-bottom: 0.3rem;
+      }
+      .modal-form-input {
+        width: 100%;
+        padding: 0.6rem 0.8rem;
+        border: 1px solid var(--color-light-grey);
+        border-radius: 0.4rem;
+        font-size: 0.9rem;
+        color: var(--color-deep-slate);
+        box-sizing: border-box;
+      }
+      .modal-image-preview-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+      }
+      .modal-image-preview {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 0.5rem;
+        border: 1px solid var(--color-light-grey);
+      }
+      .modal-save-button {
+        background-color: var(--color-marigold-glow);
+        color: var(--color-pure-white);
+        padding: 0.7rem 1.5rem;
+        border-radius: 0.5rem;
+        border: none;
+        cursor: pointer;
+        font-weight: 600;
+        margin-top: 1.5rem;
+        transition: background-color 0.2s ease-in-out;
+      }
+      .modal-save-button:hover {
+        background-color: #e69d00;
+      }
     `}
   </style>
 );
 
-const UserHomeTab = ({ userdata }) => {
-  const [services, setServices] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
-  useEffect(() => {
+
+// Utility to convert files to base64
+const toBase64 = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
+
+
+const BookNowModal = ({ isOpen, onClose, service, onSubmit }) => {
+  const [form, setForm] = React.useState({
+    date: "",
+    time: "",
+    notes: "",
+    images: [],
+  });
+  const [imagePreviews, setImagePreviews] = React.useState([]);
+  const [submitting, setSubmitting] = React.useState(false);
+
+  React.useEffect(() => {
+    if (isOpen) {
+      setForm({ date: "", time: "", notes: "", images: [] });
+      setImagePreviews([]);
+    }
+  }, [isOpen, service]);
+
+  if (!isOpen || !service) return null;
+
+  const handleChange = (e) => {
+    const { name, value, type, files } = e.target;
+    if (type === "file") {
+      const fileArr = Array.from(files);
+      setForm((prev) => ({ ...prev, images: fileArr }));
+      // Generate previews
+      Promise.all(
+        fileArr.map(
+          (file) =>
+            new Promise((resolve) => {
+              const reader = new FileReader();
+              reader.onload = (ev) => resolve(ev.target.result);
+              reader.readAsDataURL(file);
+            })
+        )
+      ).then(setImagePreviews);
+    } else {
+      setForm((prev) => ({ ...prev, [name]: value }));
+    }
+  };
+
+  const removeImage = (idx) => {
+    setForm((prev) => {
+      const newImages = prev.images.slice();
+      newImages.splice(idx, 1);
+      return { ...prev, images: newImages };
+    });
+    setImagePreviews((prev) => {
+      const newPreviews = prev.slice();
+      newPreviews.splice(idx, 1);
+      return newPreviews;
+    });
+  };
+  const handleFiles = async (e) => {
+    const files = Array.from(e.target.files);
+    const base64s = await Promise.all(files.map((file) => toBase64(file)));
+    setForm((f) => ({ ...f, images: base64s }));
+    setImagePreviews(base64s);
+  };
+
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSubmitting(true);
+    try {
+      // If you want to send images as base64 or FormData, adjust this part accordingly.
+      await onSubmit({ serviceId: service.id, ...form });
+      onClose();
+      alert("Booking request submitted successfully!");
+    } catch (error) {
+      alert("Failed to submit booking: " + error.message);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="modal-backdrop" onClick={onClose} aria-modal="true" role="dialog">
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <button className="modal-close-button" onClick={onClose} aria-label="Close booking form">
+          &times;
+        </button>
+        <h2 className="modal-title">Book Service: {service.name}</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="modal-form-group">
+            <label className="modal-form-label">Date:</label>
+            <input type="date" name="date" className="modal-form-input" value={form.date} onChange={handleChange} required />
+          </div>
+          <div className="modal-form-group">
+            <label className="modal-form-label">Time:</label>
+            <input type="time" name="time" className="modal-form-input" value={form.time} onChange={handleChange} required />
+          </div>
+          <div className="modal-form-group">
+            <label className="modal-form-label">Notes (optional):</label>
+            <textarea name="notes" className="modal-form-input" rows={3} value={form.notes} onChange={handleChange} placeholder="Any special requests or information" />
+          </div>
+          <div className="modal-form-group">
+            <label className="modal-form-label">Upload Images (optional):</label>
+            <input type="file" accept="image/*" multiple onChange={handleFiles} />
+            <div style={{ display: "flex", gap: "8px", marginTop: "8px", flexWrap: "wrap" }}>
+              {imagePreviews.map((src, idx) => (
+                <div key={idx} style={{ position: "relative" }}>
+                  <img src={src} alt={`Upload preview ${idx + 1}`} style={{ height: 60, borderRadius: 8, objectFit: "cover" }} />
+                  <button
+                    type="button"
+                    onClick={() => removeImage(idx)}
+                    style={{ position: "absolute", top: -8, right: -8, background: "red", color: "white", borderRadius: "50%", border: "none", width: 20, height: 20, cursor: "pointer" }}
+                    aria-label={`Remove image ${idx + 1}`}
+                  >×</button>
+                </div>
+              ))}
+            </div>
+          </div>
+          <button className="modal-save-button" type="submit" disabled={submitting} aria-busy={submitting}>
+            {submitting ? "Booking..." : "Confirm Booking"}
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+
+const UserHomeTab = ({ userdata }) => {
+  const [services, setServices] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState(null);
+
+  const [selectedService, setSelectedService] = React.useState(null);
+const [showBookingModal, setShowBookingModal] = React.useState(false);
+
+const openBooking = (service) => {
+  setSelectedService(service);
+  setShowBookingModal(true);
+};
+
+const closeBooking = () => {
+  setSelectedService(null);
+  setShowBookingModal(false);
+};
+
+const submitBooking = async (bookingData) => {
+  const req = { ...bookingData, userEmail: userdata.email };
+  ;
+  
+  const res = await fetch("http://localhost:8080/api/user/book", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(req),
+    credentials: "include",
+  });
+  if (!res.ok) {
+    const errorText = await res.text();
+    throw new Error(errorText || "Booking failed");
+  }
+};
+
+  React.useEffect(() => {
     async function fetchActiveServices() {
       try {
         setLoading(true);
@@ -231,7 +484,7 @@ const UserHomeTab = ({ userdata }) => {
       }
     }
     fetchActiveServices();
-  }, []);
+  }, [userdata]);
 
   if (loading) return <p>Loading services...</p>;
   if (error) return <p>Error loading services: {error}</p>;
@@ -248,33 +501,18 @@ const UserHomeTab = ({ userdata }) => {
               <div className="service-image-container">
                 {service.imagesBase64?.length > 0 ? (
                   service.imagesBase64.map((img, idx) => (
-                    <img
-                      key={idx}
-                      src={`data:image/png;base64,${img}`}
-                      alt={`${service.name} image ${idx + 1}`}
-                      className="service-card-image"
-                    />
+                    <img key={idx} src={`data:image/png;base64,${img}`} alt={`${service.name} image ${idx + 1}`} className="service-card-image" />
                   ))
                 ) : (
-                  <img
-                    src="https://placehold.co/400x250/667085/FFFFFF?text=No+Image"
-                    alt="No image available"
-                    className="service-card-image"
-                  />
+                  <img src="https://placehold.co/400x250/667085/FFFFFF?text=No+Image" alt="No image available" className="service-card-image" />
                 )}
               </div>
               <div className="service-card-content">
                 <h4>{service.name}</h4>
-                <p className="provider-name">
-                  {service.serviceProviderName || "Unknown Provider"}
-                </p>
+                <p className="provider-name">{service.serviceProviderName || "Unknown Provider"}</p>
                 <h5>₹{service.servicePrice}/-</h5>
                 <p>{service.description?.substring(0, 120) || "No description"}</p>
-                <button
-                  className="action-button"
-                  onClick={() => alert(`Booking flow for ${service.name} will be added later.`)}
-                  aria-label={`Book service ${service.name}`}
-                >
+                <button className="action-button" onClick={() => openBooking(service)} aria-label={`Book service ${service.name}`}>
                   Book Now
                 </button>
               </div>
@@ -282,19 +520,19 @@ const UserHomeTab = ({ userdata }) => {
           ))
         )}
       </div>
+      <BookNowModal isOpen={showBookingModal} onClose={closeBooking} service={selectedService} onSubmit={submitBooking} />
     </div>
   );
 };
 
-// Example parent dashboard to integrate UserHomeTab
 const UserDashboard = () => {
-    
-  const [activeTab, setActiveTab] = useState("Home");
-const userdata = {
-    userName: localStorage.getItem("userName") ,
-    email: localStorage.getItem("email") ,
+  const [activeTab, setActiveTab] = React.useState("Home");
+  const userdata = {
+    userName: localStorage.getItem("userName"),
+    email: localStorage.getItem("email"),
     providerId: 1,
   };
+
   const renderContent = () => {
     switch (activeTab) {
       case "Home":
@@ -302,9 +540,9 @@ const userdata = {
       case "Orders":
         return <p>work in progress</p>;
       case "Reviews":
-        return <p>work in progress</p>;;
+        return <p>work in progress</p>;
       case "Reports":
-       return <p>work in progress</p>;;
+        return <p>work in progress</p>;
       default:
         return <UserHomeTab userdata={userdata} />;
     }
@@ -315,18 +553,8 @@ const userdata = {
       <GlobalStyles />
       <header className="dynamic-island-navbar" aria-label="User navigation">
         <div className="setu-logo-group" aria-label="Setu logo">
-          <svg
-            className="setu-logo-icon"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            aria-hidden="true"
-            role="img"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
-            ></path>
+          <svg className="setu-logo-icon" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true" role="img">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
           </svg>
           <div className="header-logo-text">Setu User</div>
         </div>
@@ -336,12 +564,7 @@ const userdata = {
           <h1 className="dashboard-title">Welcome, {userdata.userName}!</h1>
           <nav className="nav-tabs" aria-label="User Dashboard Tabs">
             {["Home", "Orders", "Reviews", "Reports"].map((tab) => (
-              <button
-                key={tab}
-                className={`nav-tab-button ${activeTab === tab ? "active" : ""}`}
-                onClick={() => setActiveTab(tab)}
-                aria-current={activeTab === tab ? "page" : undefined}
-              >
+              <button key={tab} className={`nav-tab-button ${activeTab === tab ? "active" : ""}`} onClick={() => setActiveTab(tab)} aria-current={activeTab === tab ? "page" : undefined}>
                 {tab}
               </button>
             ))}

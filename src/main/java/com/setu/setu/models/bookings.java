@@ -30,13 +30,12 @@ public class bookings {
     private serviceproviders serviceProvider;
 
     @ManyToOne(fetch = FetchType.LAZY)
-   
     @JoinColumn(name = "u_id")
     private userdetails userDetails;
 
     private LocalDateTime bookingdatetime;
     
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
 
     @JoinColumn(name = "service_id")
     private services service;
