@@ -1,14 +1,10 @@
 package com.setu.setu.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.setu.setu.services.bookingsservices;
 import com.setu.setu.services.servicesservice;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.http.ResponseEntity;
 import java.util.Map;
 
@@ -37,10 +33,11 @@ public class UserController {
     public ResponseEntity<?> bookService(@RequestBody Map<String,Object> entity) {
         return bookingsservices.bookService(entity);
     }
+
+
+    @PostMapping("/orders")
+    public ResponseEntity<?> getUserOrders(@RequestBody Map<String,Object> entity) {
+        String email = (String) entity.get("email");
+        return bookingsservices.getUserBookings(email);
+    }
 }
-    
-
-    
-
-     
-

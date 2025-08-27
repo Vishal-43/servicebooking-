@@ -2,6 +2,7 @@ package com.setu.setu.services;
 
 import org.springframework.stereotype.Service;
 
+import com.setu.setu.DTO.bookingsDTO;
 import com.setu.setu.config.UserNotFoundException;
 import com.setu.setu.models.*;
 
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import org.springframework.http.ResponseEntity;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.time.LocalDateTime;
 
 
@@ -104,4 +106,43 @@ if (imagesObj instanceof List<?>) {
        return ResponseEntity.ok(newbooking);
 
  }
+
+
+    public ResponseEntity<?> getUserBookings(String email) {
+        user user = UserRepository.findByEmail(email);
+        if (user == null) {
+            return ResponseEntity.badRequest().body("User not found");
+        }
+
+        List<bookings> bookings = bookingRepository.findByUserDetails_Id(user.getId());
+        List<bookingsDTO> bookingdto = bookings.stream()
+			.map(booking -> {
+				Long uid = (Long) booking.getUserDetails().getId();
+                Optional<user> userb = UserRepository.findById(uid);
+				if(userb.isEmpty()){
+					return null;
+				}
+				List<bookingimage> bookingimages = bookingImageRepository.findByBooking_id(booking.getId());
+				return new bookingsDTO(
+					booking.getId(),
+                    bookingimages.stream()
+						.map(img -> Base64.getEncoder().encodeToString(img.getImageData()))
+						.collect(Collectors.toList()),
+					booking.getBookingdatetime(),
+					booking.getService().getServiceName(),
+					booking.getStatus(),
+					booking.getPaymentStatus(),
+					booking.getPaymentMethod(),
+					booking.getBookingDetails(),
+                    userb.get().getFullName(),
+                    userb.get().getEmail()
+                    );
+			})
+			.toList();
+       
+
+        return ResponseEntity.ok(bookingdto);
+    
+    }
+
 }
