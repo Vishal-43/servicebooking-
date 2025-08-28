@@ -13,6 +13,8 @@ import java.util.Map;
 
 
 
+
+
 @RestController
 @RequestMapping("/api/user")
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
@@ -23,6 +25,8 @@ public class UserController {
     private bookingsservices bookingsservices;
     @Autowired
     private reviewsservice reviewsservice;
+    @Autowired
+    private reportservices reportservice;
 
     @PostMapping("/me")
     public ResponseEntity<?> postMethodName(@RequestBody Map<String,Object> entity) {
@@ -55,5 +59,15 @@ public class UserController {
     public ResponseEntity<?> postMethodaddreviews(@RequestBody Map<String, Object> entity) {
         return reviewsservice.reviews(entity);
     }
+
+    @PostMapping("/reports")
+    public ResponseEntity<?> postMethodreport(@RequestBody Map<String, Object> entity) {
+        return ResponseEntity.ok(reportservice.getreportsbyemail(entity.get("email").toString()));
+    }
+
+    @PostMapping("/reports/submit")
+        public ResponseEntity<?> postmethodaddreport(@RequestBody Map<String, Object> entity) {
+            return reportservice.addreport(entity);
+        }
     
 }

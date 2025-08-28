@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import UserOrdersTab from "./userorders";
 import UserReviewsTab from "./userrewiwetab";
+import UserReportsTab from "./userreports";
 
 const GlobalStyles = () => (
   <style>
@@ -544,7 +545,7 @@ const UserDashboard = () => {
       case "Reviews":
         return <UserReviewsTab userdata={userdata} />;
       case "Reports":
-        return <p>work in progress</p>;
+        return <UserReportsTab userdata={userdata} />;
       default:
         return <UserHomeTab userdata={userdata} />;
     }
