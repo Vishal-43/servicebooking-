@@ -548,7 +548,7 @@ try {
           <p>Completed Orders</p>
         </div>
         <div className="dashboard-card overview-metric">
-          <h4>{backendData.averageRating}</h4>
+          <h4>{(backendData.averageRating).toFixed(1)}</h4>
           <p>Total Reviews</p>
         </div>
         <div className="dashboard-card overview-metric">
