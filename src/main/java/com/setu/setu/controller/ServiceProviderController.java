@@ -22,6 +22,7 @@ import com.setu.setu.reposoratory.UserRepository;
 import com.setu.setu.reposoratory.bookingimagereposiraotry;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -110,13 +111,13 @@ public class ServiceProviderController {
 		String email = (String) request.get("email");
 		serviceproviders provider = serviceprovidersreposiratory.findByEmail(email);
 		if (provider == null) {
-			return ResponseEntity.badRequest().body(new ApiResponse(false, "Details not found "));
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
 		}
 		long id = provider.getId();
 		List<services> services = servicereposiratory.findByServiceProvider_Id(id);
 		
 		if (services.isEmpty()) {
-			return ResponseEntity.ok(new ApiResponse(false, "No services found for this provider"));
+			return ResponseEntity.ok(services);
 		}
 		List<com.setu.setu.DTO.serviceDTO> serviceDTOs = services.stream()
 			.map(service -> {

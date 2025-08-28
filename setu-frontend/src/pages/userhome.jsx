@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import UserOrdersTab from "./userorders";
 import UserReviewsTab from "./userrewiwetab";
 import UserReportsTab from "./userreports";
+import { Navigate } from "react-router-dom";
 
 const GlobalStyles = () => (
   <style>
@@ -440,6 +441,7 @@ const UserHomeTab = ({ userdata }) => {
 
   const [selectedService, setSelectedService] = React.useState(null);
 const [showBookingModal, setShowBookingModal] = React.useState(false);
+const [redirectToLogin, setRedirectToLogin] = useState(false);
 
 const openBooking = (service) => {
   setSelectedService(service);
@@ -477,9 +479,14 @@ const submitBooking = async (bookingData) => {
           body: JSON.stringify(userdata),
           credentials: "include",
         });
+       if (res.status === 401) {
+      setRedirectToLogin(true);
+      return; // stop further processing
+    }
         if (!res.ok) throw new Error("Failed to load services");
         const data = await res.json();
         setServices(data);
+       
       } catch (err) {
         setError(err.message);
       } finally {
@@ -488,6 +495,10 @@ const submitBooking = async (bookingData) => {
     }
     fetchActiveServices();
   }, [userdata]);
+
+  if (redirectToLogin) {
+  return <Navigate to="/login" replace />;
+}
 
   if (loading) return <p>Loading services...</p>;
   if (error) return <p>Error loading services: {error}</p>;

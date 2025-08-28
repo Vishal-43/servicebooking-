@@ -336,7 +336,7 @@ const RoleSelectionPage = () => {
                 local customers seeking your expertise. Grow your business,
                 manage bookings efficiently, and get paid securely.
               </p>
-              <a href="/" className="role-card-button">
+              <a href="service-provider-details" className="role-card-button">
                 Continue as Provider
               </a>
             </div>

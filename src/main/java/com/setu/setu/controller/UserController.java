@@ -30,9 +30,9 @@ public class UserController {
 
     @PostMapping("/me")
     public ResponseEntity<?> postMethodName(@RequestBody Map<String,Object> entity) {
-        
-        
-        return servicesservice.getActiveServices();
+
+
+        return servicesservice.getActiveServices(entity);
     }
     
     
