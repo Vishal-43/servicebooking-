@@ -72,7 +72,7 @@ public class ServiceProviderController {
 		String email  = (String) request.get("email");
 		serviceproviders provider = serviceprovidersreposiratory.findByEmail(email);
 		if (provider == null) {
-			return ResponseEntity.badRequest().body(new ApiResponse(false, "Details not found "));
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
 
 		}
 

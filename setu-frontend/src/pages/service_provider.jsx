@@ -494,6 +494,7 @@ const HomeTab = ({ userdata }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [backendData, setBackendData] = useState(null);
+  const [redirectToLogin, setRedirectToLogin] = useState(false);
 
   useEffect(() => {
     async function sendUserData() {
@@ -506,16 +507,20 @@ const HomeTab = ({ userdata }) => {
   body: JSON.stringify(userdata),
   credentials: "include",
 });
-
+if (response.status === 401) {
+      setRedirectToLogin(true);
+      return; // stop further processing
+    }
 const text = await response.text();
 console.log("Raw response text:", text);
 
 try {
   const data = JSON.parse(text); // or response.json() normally
   setBackendData(data);
-} catch (e) {
-  setError("Invalid JSON response");
-}
+    
+  } catch (e) {
+    setError("Invalid JSON response");
+  }
 
       } catch (e) {
         setError(e.message);
@@ -532,7 +537,9 @@ try {
   }, [userdata]);
 
 
-
+    if (redirectToLogin) {
+  return <Navigate to="/login" replace />;
+}
   if (loading) return <p>Loading data from backend...</p>;
   if (error) return <p>Error loading data: {error}</p>;
 
