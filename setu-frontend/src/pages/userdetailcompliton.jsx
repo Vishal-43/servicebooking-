@@ -120,7 +120,7 @@ const UserDetailsPage = () => {
 
         // Redirect after a short delay to let user see success message
         setTimeout(() => {
-          window.location.href = "/";
+          window.location.href = "/me";
         }, 1000);
       } else {
         const errorData = await response.json();

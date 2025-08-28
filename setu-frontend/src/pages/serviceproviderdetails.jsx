@@ -150,7 +150,7 @@ const ServiceProviderPage = () => {
         setMessage("Your service provider profile has been successfully saved!");
         setMessageType("success");
         // Optionally redirect after success
-        // setTimeout(() => window.location.href = "/", 1500);
+        setTimeout(() => window.location.href = "/service-provider", 1500);
       } else {
         const data = await response.json();
         setMessage(data.message || "Failed to save details.");
