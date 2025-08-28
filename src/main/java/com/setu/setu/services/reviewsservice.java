@@ -18,6 +18,7 @@ import com.setu.setu.reposoratory.reviewsreposiratory;
 import com.setu.setu.reposoratory.userdetailreposiraotry;
 import com.setu.setu.models.reviews;
 import java.util.List;
+import java.time.LocalDate;
 
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -67,6 +68,7 @@ public class reviewsservice {
             review.setServiceProvider(sp);
             review.setRating((Integer) entity.get("rating"));
             review.setComment((String) entity.get("comment"));
+            review.setReviewDate(LocalDate.now().toString());
 
             reviewsrepository.save(review);
             return ResponseEntity.ok(new ApiResponse(true, "Review added successfully"));
