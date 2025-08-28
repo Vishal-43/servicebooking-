@@ -7,14 +7,15 @@ public class loginresponce {
     private String email;
     private Boolean details;
     private String name;
-    
+    private String type;
 
-    public loginresponce(boolean success, String message, Long userId, String email,boolean details,String name) {
+    public loginresponce(boolean success, String message, Long userId, String email, boolean details, String name, String type) {
         this.success = success;
         this.details = details;
         this.message = message;
         this.name = name;
         this.userId = userId;
+        this.type = type;
         this.email = email;
     }
 
@@ -53,5 +54,13 @@ public class loginresponce {
     }
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

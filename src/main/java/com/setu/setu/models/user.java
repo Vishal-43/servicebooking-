@@ -3,6 +3,7 @@ package com.setu.setu.models;
 
 
 import jakarta.persistence.*;
+import lombok.Builder.Default;
 
 
 // import com.setu.setu.models.userdetails;
@@ -24,6 +25,10 @@ public class user {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @PrimaryKeyJoinColumn // This annotation is crucial for shared primary key
     private userdetails userDetail;
+
+    @Column(nullable = false, columnDefinition = "varchar(255) default 'none'")
+    private String type;
+
 
    public user(){
 
@@ -67,10 +72,12 @@ public class user {
         this.password = password;
     }
 
+    public String getType() {
+        return type;
+    }
 
-    
-   
-
-  
+    public void setType(String type) {
+        this.type = type;
+    }
 
 }

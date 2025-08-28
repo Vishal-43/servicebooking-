@@ -38,12 +38,14 @@ const LoginPage = () => {
         localStorage.setItem('userId', data.userId); 
         localStorage.setItem('email', data.email);
         localStorage.setItem('userName', data.name); // Assuming userName is returned in the response
-        if(data.details){
-         window.location.href = "/service-provider-details"; 
+        if(data.type === "user"){
+         window.location.href = "/me"; 
         return null; 
+        }else if(data.type === "service_provider"){
+          window.location.href = "/service-provider"; 
+          return null;
         }else{
           window.location.href = "/role-selection"; 
-          return null;
         }
         
     

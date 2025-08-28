@@ -82,17 +82,20 @@ public class Authcontroller {
                 // String token = jwtTokenProvider.generateToken(existingUser.get().getEmail());
                 user user = userRepository.findByEmail(existingUser.get().getEmail());
                 String name = user.getFullName();
-                System.out.println("User name: " + name);
-                Optional<userdetails> userdetails = Optional.ofNullable(userdetailsreposiratory.findByUserId(existingUser.get().getId()));
-                if(userdetails.isPresent()) {
-                    return ResponseEntity.ok(new loginresponce(true, "Login successful", existingUser.get().getId(), existingUser.get().getEmail(), true,name));
+                if(user.getType().equals("user")) {
+                    return ResponseEntity.ok(new loginresponce(true, "Login successful", existingUser.get().getId(), existingUser.get().getEmail(), false,name, existingUser.get().getType()));
                 }
-                return ResponseEntity.ok(new loginresponce(true, "Login successful", existingUser.get().getId(), existingUser.get().getEmail(), false,name));
+
+                if(user.getType().equals("service_provider")) {
+                    return ResponseEntity.ok(new loginresponce(true, "Login successful", existingUser.get().getId(), existingUser.get().getEmail(), false,name, existingUser.get().getType()));
+                }
             } else {
                 return ResponseEntity
                     .badRequest()
                     .body(new ApiResponse(false, "Invalid email or password"));
             }
+
+            
         }
 
         return ResponseEntity
@@ -166,6 +169,9 @@ public ResponseEntity<?> completeProfile(@RequestBody Map<String, Object> reques
     details.setAddress(address);
 
     userdetailsreposiratory.save(details);
+
+    userEntity.setType("user");
+    userRepository.save(userEntity);
 
     return ResponseEntity.ok(details);
 }
@@ -310,6 +316,8 @@ public ResponseEntity<?> postMethodName(@RequestBody Map<String, Object> request
             .badRequest()
             .body(new ApiResponse(false, "Failed to save service provider details"));
     }
+    userEntity.setType("service_provider");
+    userRepository.save(userEntity);
 
     return ResponseEntity.ok(request);
 }
