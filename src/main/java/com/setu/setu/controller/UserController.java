@@ -2,11 +2,13 @@ package com.setu.setu.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import com.setu.setu.services.bookingsservices;
-import com.setu.setu.services.servicesservice;
+import com.setu.setu.models.reviews;
+import com.setu.setu.services.*;
+
 
 import org.springframework.http.ResponseEntity;
 import java.util.Map;
+
 
 
 
@@ -19,6 +21,8 @@ public class UserController {
     private servicesservice servicesservice;
     @Autowired
     private bookingsservices bookingsservices;
+    @Autowired
+    private reviewsservice reviewsservice;
 
     @PostMapping("/me")
     public ResponseEntity<?> postMethodName(@RequestBody Map<String,Object> entity) {
@@ -40,4 +44,16 @@ public class UserController {
         String email = (String) entity.get("email");
         return bookingsservices.getUserBookings(email);
     }
+
+
+    @PostMapping("/review")
+    public ResponseEntity<?> postMethodaddreview(@RequestBody Map<String, Object> entity) {
+        return reviewsservice.addreview(entity);
+    }
+
+    @PostMapping("/reviews")
+    public ResponseEntity<?> postMethodaddreviews(@RequestBody Map<String, Object> entity) {
+        return reviewsservice.reviews(entity);
+    }
+    
 }

@@ -35,11 +35,12 @@ public class reviews {
 
 
     public reviews() {}
-    public reviews(user user, float rating, String comment, String reviewDate) {
+    public reviews(user user, float rating, String comment, String reviewDate, serviceproviders serviceProvider) {
         this.user = user;
         this.rating = rating;
         this.comment = comment;
         this.reviewDate = reviewDate;
+        this.serviceProvider = serviceProvider;
     }
     // Getters and setters
     public Long getId() {
