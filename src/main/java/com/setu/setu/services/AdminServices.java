@@ -101,5 +101,21 @@ public class AdminServices {
 
         return ResponseEntity.ok(userDTOs);
     }
+    
+    public ResponseEntity<?> makeAdmin(@RequestBody Map<String, Object> entity) {
+        String email = (String) entity.get("email");
+       
 
+        
+
+        user targetUser = userRepository.findByEmail(email);
+        if (targetUser == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Target user not found");
+        }
+
+        targetUser.setType("admin");
+        userRepository.save(targetUser);
+
+        return ResponseEntity.ok("User promoted to admin successfully");
+    }
 }

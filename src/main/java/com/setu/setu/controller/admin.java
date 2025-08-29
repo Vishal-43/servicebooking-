@@ -6,6 +6,9 @@ import java.util.Map;
 import com.setu.setu.services.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 @RestController
 @RequestMapping("/api/admin")
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
@@ -29,5 +32,12 @@ public class admin {
         return adminservices.getAllServiceProviders(entity);
     }
 
+    @PostMapping("/makeadmin")
+    public ResponseEntity<?> postMethodmakeadmin (@RequestBody Map<String,Object> entity) {
+        //TODO: process POST request
+
+        return adminservices.makeAdmin(entity);
+    }
+    
 
 }
