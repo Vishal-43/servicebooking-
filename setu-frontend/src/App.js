@@ -10,6 +10,7 @@ import UserDetailsPage from "./pages/userdetailcompliton";
 import ServiceProviderPage from "./pages/serviceproviderdetails";
 import ServiceProviderDashboard from "./pages/service_provider";
 import UserDashboard from "./pages/userhome";
+import AdminDashboard from "./pages/admin";
 // import MyServicesDashboard from "./pages/myservicestab";
 // import OrdersTab  from "./pages/orders";
 // import Dashboard from "./pages/Dashboard";
@@ -33,6 +34,7 @@ function App() {
         <Route path="/admin" element={<ServiceProviderPage />} />
         <Route path="/service-provider" element={<ServiceProviderDashboard />} />
         <Route path="/me" element={<UserDashboard />} />
+        <Route path="/nimda" element={<AdminDashboard />} />
 
         {/* Protected Routes */}
         {/* <Route 
