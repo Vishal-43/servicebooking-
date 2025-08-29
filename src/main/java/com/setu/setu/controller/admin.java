@@ -18,4 +18,10 @@ public class admin {
     public ResponseEntity<?> getAdminStats(@RequestBody Map<String,Object> entity) {
         return adminservices.getAdminStats(entity);
     }
+
+    @PostMapping("/users")
+    public ResponseEntity<?> getAllUsers(@RequestBody Map<String,Object> entity) {
+        return adminservices.getAllUsers(entity);
+    }
+
 }

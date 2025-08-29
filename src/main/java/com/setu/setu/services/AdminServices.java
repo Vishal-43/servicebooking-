@@ -9,6 +9,8 @@ import com.setu.setu.reposoratory.*;
 import com.setu.setu.models.*;
 import java.util.Map;
 import com.setu.setu.DTO.AdminstatsDTO;
+import java.util.List;
+import com.setu.setu.DTO.usersDTO;
 
 
 @Service
@@ -47,6 +49,28 @@ public class AdminServices {
         return ResponseEntity.ok(stats);
     }
 
+    public ResponseEntity<?> getAllUsers(@RequestBody Map<String,Object> entity){
+        String email = (String) entity.get("email");
+        user user = userRepository.findByEmail(email);
+        String Type = user.getType();
+        if(!Type.equals("admin")){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
+        }
+        List<user> users = userRepository.findByType("user");
+        if (users.isEmpty()) {
+            return ResponseEntity.ok("");
+        }
 
+        List<usersDTO> userDTOs = users.stream()
+        .map(u -> {
+            usersDTO dto = new usersDTO();
+            dto.setId(u.getId());
+            dto.setName(u.getFullName());
+            dto.setType(u.getType());
+            return dto;
+        }).toList();
+
+        return ResponseEntity.ok(userDTOs);
+    }
 
 }

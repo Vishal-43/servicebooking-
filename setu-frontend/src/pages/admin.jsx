@@ -255,8 +255,8 @@ const AdminUsersTab = () => {
     const [message, setMessage] = useState("");
     useEffect(() => {
         async function fetchAll() {
-            const resU = await fetch("http://localhost:8080/api/admin/users", { credentials: "include" });
-            const resP = await fetch("http://localhost:8080/api/admin/serviceproviders", { credentials: "include" });
+            const resU = await fetch("http://localhost:8080/api/admin/users", { method:"post",headers: { "Content-Type": "application/json" },body: JSON.stringify(userdata), credentials: "include" });
+            const resP = await fetch("http://localhost:8080/api/admin/serviceproviders", { method:"post", headers: { "Content-Type": "application/json" }, body: JSON.stringify(userdata), credentials: "include" });
             setUsers(await resU.json());
             setProviders(await resP.json());
         }
@@ -286,11 +286,11 @@ const AdminUsersTab = () => {
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2rem" }}>
                 <div>
                     <h3>All Users</h3>
-                    <ul>{users.map(u => <li key={u.id}>{u.email} ({u.role})</li>)}</ul>
+                    <ul>{users.map(u => <li key={u.id}>{u.name} ({u.role})</li>)}</ul>
                 </div>
                 <div>
                     <h3>All Service Providers</h3>
-                    <ul>{providers.map(p => <li key={p.id}>{p.email} ({p.name})</li>)}</ul>
+                    <ul>{providers.map(p => <li key={p.id}>{p.name} ({p.role})</li>)}</ul>
                 </div>
             </div>
         </div>
