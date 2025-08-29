@@ -37,3 +37,5 @@ build/
 helpme.txt
 package.json
 package-lock.json
+
+/src/main/java/com/setu/setu/config/AdminDataInitializer.java
