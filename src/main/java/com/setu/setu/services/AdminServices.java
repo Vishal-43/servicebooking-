@@ -57,6 +57,8 @@ public class AdminServices {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
         }
         List<user> users = userRepository.findByType("user");
+        List<user> adminUsers = userRepository.findByType("admin");
+        users.addAll(adminUsers);
         if (users.isEmpty()) {
             return ResponseEntity.ok("");
         }
@@ -67,6 +69,33 @@ public class AdminServices {
             dto.setId(u.getId());
             dto.setName(u.getFullName());
             dto.setType(u.getType());
+            dto.setEmail(u.getEmail());
+            return dto;
+        }).toList();
+
+        return ResponseEntity.ok(userDTOs);
+    }
+
+
+    public ResponseEntity<?> getAllServiceProviders(@RequestBody Map<String,Object> entity){
+        String email = (String) entity.get("email");
+        user user = userRepository.findByEmail(email);
+        String Type = user.getType();
+        if(!Type.equals("admin")){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
+        }
+        List<user> users = userRepository.findByType("service_provider");
+        if (users.isEmpty()) {
+            return ResponseEntity.ok(users);
+        }
+
+        List<usersDTO> userDTOs = users.stream()
+        .map(u -> {
+            usersDTO dto = new usersDTO();
+            dto.setId(u.getId());
+            dto.setName(u.getFullName());
+            dto.setType(u.getType());
+            dto.setEmail(u.getEmail());
             return dto;
         }).toList();
 

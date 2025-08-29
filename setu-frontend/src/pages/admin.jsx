@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Navigate } from "react-router-dom";
-
+import AdminUsersProvidersTable  from "./displayuser";
 
 const GlobalStyles = () => (
     <style>
@@ -283,14 +283,9 @@ const AdminUsersTab = () => {
                 <button className="modal-save-button" type="submit">Make Admin</button>
                 {message && <div style={{ marginTop: 8, color: "#0A4DAA" }}>{message}</div>}
             </form>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2rem" }}>
+            <div style={{  gridTemplateColumns: "1fr 1fr", gap: "2rem"  }}>
                 <div>
-                    <h3>All Users</h3>
-                    <ul>{users.map(u => <li key={u.id}>{u.name} ({u.role})</li>)}</ul>
-                </div>
-                <div>
-                    <h3>All Service Providers</h3>
-                    <ul>{providers.map(p => <li key={p.id}>{p.name} ({p.role})</li>)}</ul>
+                    <AdminUsersProvidersTable userdata={userdata} users={users} providers={providers} />
                 </div>
             </div>
         </div>

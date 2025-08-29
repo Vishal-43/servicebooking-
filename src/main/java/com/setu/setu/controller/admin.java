@@ -24,4 +24,10 @@ public class admin {
         return adminservices.getAllUsers(entity);
     }
 
+    @PostMapping("/serviceproviders")
+    public ResponseEntity<?> getAllServiceProviders(@RequestBody Map<String,Object> entity) {
+        return adminservices.getAllServiceProviders(entity);
+    }
+
+
 }

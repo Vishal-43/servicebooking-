@@ -4,6 +4,7 @@ public class usersDTO {
     private Long id;
     private String name;
     private String type;
+    private String email;
 
     // Getters and Setters
     public Long getId() {
@@ -29,4 +30,14 @@ public class usersDTO {
     public void setType(String type) {
         this.type = type;
     }
+
+    public String getEmail() {
+        return email;
+    }
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+
+    
 }

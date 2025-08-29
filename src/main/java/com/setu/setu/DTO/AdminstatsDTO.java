@@ -40,5 +40,5 @@ public class AdminstatsDTO {
         this.totalReports = totalReports;
     }
 
-    
+
 }
