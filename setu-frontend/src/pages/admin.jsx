@@ -182,10 +182,22 @@ body {
   margin-bottom: 0.5rem;
 }
 
+
 /* Responsive tweaks */
 @media (max-width: 900px) {
   .dashboard-header, .dashboard-content { max-width: 95vw; }
 }
+
+.service-image-container {
+        width: 100%;
+        height: 150px;
+        overflow-x: auto;
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
 
 `}
     </style>
@@ -419,41 +431,61 @@ const AdminServicesTab = () => {
     const [services, setServices] = useState([]);
     useEffect(() => {
         async function fetchServices() {
-            const res = await fetch("http://localhost:8080/api/admin/services", { credentials: "include" });
+            const res = await fetch("http://localhost:8080/api/admin/services", {method:"post",headers: { "Content-Type": "application/json" },body: JSON.stringify(userdata), credentials: "include" });
             setServices(await res.json());
         }
         fetchServices();
     }, []);
     const toggleActive = async (id, isActive) => {
-        await fetch(`http://localhost:8080/api/admin/services/${id}/status`, {
+        await fetch(`http://localhost:8080/api/admin/services/status`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ active: !isActive }),
+            body: JSON.stringify({ active: !isActive, id }),
             credentials: "include"
         });
         setServices(s => s.map(serv => serv.id === id ? { ...serv, active: !isActive } : serv));
     };
     return (
         <div className="dashboard-content">
-            <h2 className="dashboard-title">All Services</h2>
-            <div className="services-container" style={{ gap: "1.5rem" }}>
-                {services.map(service => (
-                    <div key={service.id} className="service-card">
-                        <h3 style={{ marginBottom: 6 }}>{service.name}</h3>
-                        <p style={{ fontWeight: 600 }}>{service.providerName || "Unknown Provider"}</p>
-                        <p>Price: ₹{service.price}</p>
-                        <p>Status: <b style={{ color: service.active ? '#28A745' : '#D32F2F' }}>
-                            {service.active ? 'Active' : 'Inactive'}
-                        </b></p>
-                        <button
-                            className="action-button"
-                            style={{ background: service.active ? "#D32F2F" : "#28A745" }}
-                            onClick={() => toggleActive(service.id, service.active)}
-                        >{service.active ? "Deactivate" : "Activate"}</button>
-                    </div>
-                ))}
-            </div>
+  <h2 className="dashboard-title">All Services</h2>
+  <div className="services-container" style={{ gap: "1.5rem" }}>
+    {services.map(service => {
+      const isActive = service.status?.toLowerCase() === "active";
+
+      return (
+        <div key={service.id} className="service-card" style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: 16 }}>
+<div className="service-image-container" >
+                {service.imagesBase64?.length > 0 ? (
+                  service.imagesBase64.map((img, idx) => (
+                    <img key={idx} src={`data:image/png;base64,${img}`} alt={`${service.name} image ${idx + 1}`} className="service-card-image" />
+                  ))
+                ) : (
+                  <img src="https://placehold.co/400x250/667085/FFFFFF?text=No+Image" alt="No image available" className="service-card-image" />
+                )}
+              </div>
+  
+          <h3 style={{ marginBottom: 6 }}>{service.name}</h3>
+          <p>Price: ₹{service.price}</p>
+          <p>
+            Status:{" "}
+            <b style={{ color: isActive ? '#28A745' : '#D32F2F' }}>
+              {service.status || (isActive ? "Active" : "Inactive")}
+            </b>
+          </p>
+          <button
+            className="action-button"
+            style={{ background: isActive ? "#D32F2F" : "#28A745" }}
+            onClick={() => toggleActive(service.id, isActive)}
+            aria-label={`${isActive ? "Deactivate" : "Activate"} service ${service.name}`}
+          >
+            {isActive ? "Deactivate" : "Activate"}
+          </button>
         </div>
+      );
+    })}
+  </div>
+</div>
+
     );
 };
 

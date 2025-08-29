@@ -49,5 +49,11 @@ public class admin {
 
         return adminservices.updateReportStatus(entity);
     }
+
+    @PostMapping("/services")
+    public ResponseEntity<?> postMethodservices(@RequestBody Map<String, Object> entity) {
+
+        return adminservices.getallservices(entity);
+    }
     
 }

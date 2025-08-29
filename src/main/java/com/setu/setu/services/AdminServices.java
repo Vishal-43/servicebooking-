@@ -9,9 +9,15 @@ import com.setu.setu.reposoratory.*;
 import com.setu.setu.models.*;
 import java.util.Map;
 import com.setu.setu.DTO.AdminstatsDTO;
+import com.setu.setu.DTO.serviceDTO;
+
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 import com.setu.setu.DTO.usersDTO;
+import com.setu.setu.DTO.servicesDTO;
 import com.setu.setu.controller.Authcontroller.ApiResponse;
 
 
@@ -22,16 +28,15 @@ public class AdminServices {
     private final servicereposiratory serviceRepository;
     private final reportsreposiratory reportsRepository;
     private final UserRepository userRepository;
+    private final ServiceImageRepository serviceImageRepo;
 
-
-    public AdminServices(userdetailreposiraotry userDetailRepository, serviceprovidersreposiratory serviceProviderRepository, servicereposiratory serviceRepository, reportsreposiratory reportsRepository, UserRepository userRepository) {
+    public AdminServices(userdetailreposiraotry userDetailRepository, serviceprovidersreposiratory serviceProviderRepository, servicereposiratory serviceRepository, reportsreposiratory reportsRepository, UserRepository userRepository, ServiceImageRepository serviceImageRepo) {
         this.userDetailRepository = userDetailRepository;
         this.serviceProviderRepository = serviceProviderRepository;
         this.serviceRepository = serviceRepository;
         this.reportsRepository = reportsRepository;
         this.userRepository = userRepository;
-
-
+        this.serviceImageRepo = serviceImageRepo;
     }
 
     public ResponseEntity<?> getAdminStats(@RequestBody Map<String,Object> entity){
@@ -161,6 +166,39 @@ public class AdminServices {
         reportsRepository.save(report.get());
         return ResponseEntity.ok(new ApiResponse(true, "Report status updated successfully"));
 
+    }
+
+
+    public ResponseEntity<?> getallservices(@RequestBody Map<String,Object> entity){
+        String email = (String) entity.get("email");
+        user user = userRepository.findByEmail(email);
+        String Type = user.getType();
+        if(!Type.equals("admin")){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
+        }
+        List<services> services = serviceRepository.findAll();
+        if (services.isEmpty()) {
+            return ResponseEntity.ok("");
+        }
+
+        List<serviceDTO> serviceDTOs = services.stream()
+        .map(svc -> {
+            List<ServiceImage> serviceImages = serviceImageRepo.findByService_id(svc.getId());
+            return new serviceDTO(
+                svc.getId(),
+                svc.getServiceName(),
+                svc.getServiceDescription(),
+                serviceImages.stream()
+                    .map(img -> Base64.getEncoder().encodeToString(img.getImageData()))
+                    .collect(Collectors.toList()),
+                svc.getServicePrice(),
+                svc.getServiceCategory(),
+                svc.getServiceProvider().getUser().getFullName(),
+                svc.getStatus()
+            );
+        }).toList();
+
+        return ResponseEntity.ok(serviceDTOs);
     }
 
 }

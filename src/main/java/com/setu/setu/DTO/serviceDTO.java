@@ -4,6 +4,8 @@ import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.setu.setu.models.serviceproviders;
+
 public class serviceDTO {
     private Long id;
     private String name;
@@ -12,6 +14,7 @@ public class serviceDTO {
     private String serviceCategory;
     private double servicePrice;
     private String status;
+    private String serviceprovider;
 
 
     // Getters and Setters
@@ -85,6 +88,27 @@ public class serviceDTO {
                 ", serviceCategory='" + serviceCategory + '\'' +
                 '}';
     }
+
+    public serviceDTO(Long id, String name, String description, List<String> imagesBase64, double servicePrice, String serviceCategory,String serviceprovider,String status) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.imagesBase64 = imagesBase64;
+        this.servicePrice = servicePrice;
+        this.serviceCategory = serviceCategory;
+        this.serviceprovider = serviceprovider;
+        this.status = status;
+    }
+
+    public String getServiceprovider() {
+        return serviceprovider;
+    }
+
+    public void setServiceprovider(String serviceprovider) {
+        this.serviceprovider = serviceprovider;
+    }
+
+  
 
 
 }
