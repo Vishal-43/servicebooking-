@@ -10,7 +10,9 @@ import com.setu.setu.models.*;
 import java.util.Map;
 import com.setu.setu.DTO.AdminstatsDTO;
 import java.util.List;
+import java.util.Optional;
 import com.setu.setu.DTO.usersDTO;
+import com.setu.setu.controller.Authcontroller.ApiResponse;
 
 
 @Service
@@ -133,4 +135,33 @@ public class AdminServices {
         List<reports> reports = reportsRepository.findAll();
         return ResponseEntity.ok(reports);
     }
+
+    public ResponseEntity<?> updateReportStatus(@RequestBody Map<String, Object> entity) {
+         Long id = null;
+        Object idObj = entity.get("id");
+        if (idObj instanceof Number) {
+            id = ((Number) idObj).longValue();
+        } else if (idObj instanceof String) {
+            try {
+                id = Long.parseLong((String) idObj);
+            } catch (NumberFormatException e) {
+                return ResponseEntity.badRequest().body(new ApiResponse(false, "Invalid service id"));
+            }
+        } else {
+            return ResponseEntity.badRequest().body(new ApiResponse(false, "Service id is required"));
+        }
+
+        Optional<reports> report = reportsRepository.findById(id);
+        if (report.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(false, "Report not found"));
+        }
+
+        // Update the report status
+        report.get().setStatus((String) entity.get("status"));
+        reportsRepository.save(report.get());
+        return ResponseEntity.ok(new ApiResponse(true, "Report status updated successfully"));
+
+    }
+
 }
+
