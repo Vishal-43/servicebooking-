@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Navigate } from "react-router-dom";
-import AdminUsersProvidersTable  from "./displayuser";
+import AdminUsersProvidersTable from "./displayuser";
+import { FaCheckCircle, FaClock } from "react-icons/fa";
 
 const GlobalStyles = () => (
     <style>
@@ -210,7 +211,7 @@ const AdminDashboardHome = () => {
                 const res = await fetch("http://localhost:8080/api/admin/stats", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    
+
                     body: JSON.stringify(userdata),
                     credentials: "include",
                 });
@@ -231,7 +232,7 @@ const AdminDashboardHome = () => {
 
     if (loading) return <p>Loading...</p>;
     if (redirectToLogin) {
-      return <Navigate to="/login" replace />;
+        return <Navigate to="/login" replace />;
     }
 
     return (
@@ -255,8 +256,8 @@ const AdminUsersTab = () => {
     const [message, setMessage] = useState("");
     useEffect(() => {
         async function fetchAll() {
-            const resU = await fetch("http://localhost:8080/api/admin/users", { method:"post",headers: { "Content-Type": "application/json" },body: JSON.stringify(userdata), credentials: "include" });
-            const resP = await fetch("http://localhost:8080/api/admin/serviceproviders", { method:"post", headers: { "Content-Type": "application/json" }, body: JSON.stringify(userdata), credentials: "include" });
+            const resU = await fetch("http://localhost:8080/api/admin/users", { method: "post", headers: { "Content-Type": "application/json" }, body: JSON.stringify(userdata), credentials: "include" });
+            const resP = await fetch("http://localhost:8080/api/admin/serviceproviders", { method: "post", headers: { "Content-Type": "application/json" }, body: JSON.stringify(userdata), credentials: "include" });
             setUsers(await resU.json());
             setProviders(await resP.json());
         }
@@ -283,7 +284,7 @@ const AdminUsersTab = () => {
                 <button className="modal-save-button" type="submit">Make Admin</button>
                 {message && <div style={{ marginTop: 8, color: "#0A4DAA" }}>{message}</div>}
             </form>
-            <div style={{  gridTemplateColumns: "1fr 1fr", gap: "2rem"  }}>
+            <div style={{ gridTemplateColumns: "1fr 1fr", gap: "2rem" }}>
                 <div>
                     <AdminUsersProvidersTable userdata={userdata} users={users} providers={providers} />
                 </div>
@@ -297,45 +298,119 @@ const AdminReportsTab = () => {
     const [reports, setReports] = useState([]);
     useEffect(() => {
         async function fetchReports() {
-            const res = await fetch("http://localhost:8080/api/admin/reports", { credentials: "include" });
+            const res = await fetch("http://localhost:8080/api/admin/reports", { method: "post", headers: { "Content-Type": "application/json" }, body: JSON.stringify(userdata), credentials: "include" });
             setReports(await res.json());
         }
         fetchReports();
     }, []);
     const updateStatus = async (id, status) => {
-        await fetch(`http://localhost:8080/api/admin/reports/${id}/status`, {
+        await fetch(`http://localhost:8080/api/admin/reports/status`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ status }),
+            body: JSON.stringify({ status,id }),
             credentials: "include"
         });
         setReports(r => r.map(rep => rep.id === id ? { ...rep, status } : rep));
     };
     return (
-        <div className="dashboard-content">
-            <h2 className="dashboard-title">Reports Management</h2>
-            <div className="services-container" style={{ gap: "1.5rem" }}>
-                {reports.map(report => (
-                    <div key={report.id} className="service-card">
-                        <h3>{report.title}</h3>
-                        <p>{report.description}</p>
-                        <p style={{ fontSize: 14, color: "#888" }}>Status: <b>{report.status}</b></p>
-                        <button
-                            className="action-button"
-                            style={{ background: "#28A745", marginRight: 8 }}
-                            onClick={() => updateStatus(report.id, "Resolved")}
-                            disabled={report.status === "Resolved"}
-                        >Mark as Resolved</button>
-                        <button
-                            className="action-button"
-                            style={{ background: "#FFA000" }}
-                            onClick={() => updateStatus(report.id, "Pending")}
-                            disabled={report.status === "Pending"}
-                        >Mark as Pending</button>
-                    </div>
-                ))}
-            </div>
+
+
+    
+
+<div className="dashboard-content" style={{ maxWidth: 1200, margin: "0 auto" }}>
+  <h2 className="dashboard-title" style={{ marginBottom: '1.5rem' }}>
+    Reports Management
+  </h2>
+  <div
+    className="services-container"
+    style={{
+      gap: "1.8rem",
+      display: "grid",
+      gridTemplateColumns: "repeat(auto-fill,minmax(320px,1fr))",
+    }}
+  >
+    {reports.map((report) => {
+      const isResolved = report.status === "Resolved";
+      const toggleStatus = isResolved ? "Pending" : "Resolved";
+      return (
+        <div
+          key={report.id}
+          className="service-card"
+          style={{
+            padding: "1.6rem",
+            borderRadius: "1rem",
+            boxShadow: "0 8px 18px rgba(0,0,0,0.1)",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            backgroundColor: "#fff",
+          }}
+        >
+          <div>
+            
+            <p style={{ color: "#444", marginBottom: "1rem", minHeight: 60 }}>
+              {report.content}
+            </p>
+          </div>
+
+          <div style={{ display: "flex", alignItems: "center", marginBottom: "1rem" }}>
+            <span
+              style={{
+                padding: "6px 12px",
+                borderRadius: 20,
+                backgroundColor: isResolved ? "#28a74520" : "#ffaf0020",
+                color: isResolved ? "#28a745" : "#ffaf00",
+                fontWeight: 600,
+                fontSize: "0.85rem",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 6,
+                userSelect: "none",
+              }}
+            >
+              {isResolved ? (
+                <>
+                  <FaCheckCircle />
+                  Resolved
+                </>
+              ) : (
+                <>
+                  <FaClock />
+                  Pending
+                </>
+              )}
+            </span>
+            <p style={{ fontSize: 13, color: "#777", marginLeft: "auto" }}>
+              Status updated
+            </p>
+          </div>
+
+          <button
+            className="action-button"
+            style={{
+              background: isResolved ? "#FFA000" : "#28A745",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "8px",
+              padding: "0.6rem 0",
+              fontWeight: 700,
+              fontSize: "1rem",
+              cursor: "pointer"
+            }}
+            onClick={() => updateStatus(report.id, toggleStatus)}
+            aria-label={`Mark report ${report.title} as ${toggleStatus}`}
+          >
+            {isResolved ? <FaClock /> : <FaCheckCircle />}
+            Mark {toggleStatus}
+          </button>
         </div>
+      );
+    })}
+  </div>
+</div>
+
+
     );
 };
 
@@ -383,12 +458,12 @@ const AdminServicesTab = () => {
 };
 
 
-  
-  const userdata = {
+
+const userdata = {
     userName: localStorage.getItem("userName"),
     email: localStorage.getItem("email"),
     providerId: 1,
-  };
+};
 
 // --- ADMIN DASHBOARD WRAPPER ---
 const AdminDashboard = () => {
@@ -399,7 +474,7 @@ const AdminDashboard = () => {
 
     return (
         <>
-        <GlobalStyles />
+            <GlobalStyles />
             <header className="dynamic-island-navbar" aria-label="Admin navigation">
                 <div className="setu-logo-group" aria-label="Setu Admin logo" style={{ display: "flex", alignItems: "center", height: "70px" }}>
                     <svg className="setu-logo-icon" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true" role="img">
@@ -428,7 +503,7 @@ const AdminDashboard = () => {
                 {activeTab === "Users" && <AdminUsersTab />}
                 {activeTab === "Reports" && <AdminReportsTab />}
                 {activeTab === "Services" && <AdminServicesTab />}
-                
+
             </main>
         </>
     );

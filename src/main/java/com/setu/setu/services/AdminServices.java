@@ -118,4 +118,19 @@ public class AdminServices {
 
         return ResponseEntity.ok("User promoted to admin successfully");
     }
+
+    public ResponseEntity<?> getAllReports(@RequestBody Map<String, Object> entity) {
+        String email = (String) entity.get("email");
+        user targetUser = userRepository.findByEmail(email);
+        if (targetUser == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Target user not found");
+        }
+
+        if (!targetUser.getType().equals("admin")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
+        }
+
+        List<reports> reports = reportsRepository.findAll();
+        return ResponseEntity.ok(reports);
+    }
 }

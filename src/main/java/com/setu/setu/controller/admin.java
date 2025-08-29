@@ -39,5 +39,9 @@ public class admin {
         return adminservices.makeAdmin(entity);
     }
     
+    @PostMapping("/reports")
+    public ResponseEntity<?> getAllReports(@RequestBody Map<String,Object> entity) {
+        return adminservices.getAllReports(entity);
+    }
 
 }
