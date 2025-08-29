@@ -201,5 +201,37 @@ public class AdminServices {
         return ResponseEntity.ok(serviceDTOs);
     }
 
+    public ResponseEntity<?> updateServiceStatus(@RequestBody Map<String,Object> entity){
+        Long id = null;
+        Object idObj = entity.get("id");
+        if (idObj instanceof Number) {
+            id = ((Number) idObj).longValue();
+        } else if (idObj instanceof String) {
+            try {
+                id = Long.parseLong((String) idObj);
+            } catch (NumberFormatException e) {
+                return ResponseEntity.badRequest().body(new ApiResponse(false, "Invalid service id"));
+            }
+        } else {
+            return ResponseEntity.badRequest().body(new ApiResponse(false, "Service id is required"));
+        }
+
+        Optional<services> service = serviceRepository.findById(id);
+        if (service.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(false, "Service not found"));
+        }
+
+        boolean active = (boolean)entity.get("active");
+
+        if(active){
+            service.get().setStatus("active");
+        } else {
+            service.get().setStatus("inactive");
+        }
+        serviceRepository.save(service.get());
+        return ResponseEntity.ok(new ApiResponse(true, "Service status updated successfully"));
+
+    }
+
 }
 

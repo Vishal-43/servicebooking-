@@ -55,5 +55,11 @@ public class admin {
 
         return adminservices.getallservices(entity);
     }
+
+    @PostMapping("/services/status")
+    public ResponseEntity<?> postMethodservicesstatus(@RequestBody Map<String, Object> entity) {
+
+        return adminservices.updateServiceStatus(entity);
+    }
     
 }

@@ -465,7 +465,7 @@ const AdminServicesTab = () => {
               </div>
   
           <h3 style={{ marginBottom: 6 }}>{service.name}</h3>
-          <p>Price: ₹{service.price}</p>
+          <p>Price: ₹{service.servicePrice}</p>
           <p>
             Status:{" "}
             <b style={{ color: isActive ? '#28A745' : '#D32F2F' }}>
