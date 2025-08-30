@@ -6,16 +6,11 @@ import com.setu.setu.reposoratory.userdetailreposiraotry;
 import com.setu.setu.reposoratory.UserRepository;
 import com.setu.setu.models.serviceproviders;
 import com.setu.setu.reposoratory.*;
-// import com.setu.setu.config.JwtTokenProvider;
-
-// import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
-// import javax.servlet.http.Cookie;
-// import javax.servlet.http.HttpServletResponse;
-// import javax.servlet.http.HttpServletRequest;
+
 import java.util.Optional;
 import java.util.Map;
 import com.setu.setu.DTO.loginresponce;
@@ -30,9 +25,7 @@ public class Authcontroller {
     @Autowired
     private UserRepository userRepository;
 
-    // @Autowired
-    // private JwtTokenProvider jwtTokenProvider;
-
+   
     @Autowired
     private userdetailreposiraotry userdetailsreposiratory;
 
@@ -60,6 +53,7 @@ public class Authcontroller {
 
     // Hash the password before storing
     user.setPassword(passwordEncoder.encode(user.getPassword()));
+    user.setType("none");
     userRepository.save(user);
 
     return ResponseEntity.ok(new ApiResponse(true, "User registered successfully"));
@@ -74,12 +68,11 @@ public class Authcontroller {
                 .body(new ApiResponse(false, "Email and password are required"));
 
         }else if (LoginUser.getEmail() != null && LoginUser.getPassword() != null) {
-            // Authenticate user
+      
             Optional<user> existingUser = Optional.ofNullable(userRepository.findByEmail(LoginUser.getEmail()));
             
             if (existingUser.isPresent() && passwordEncoder.matches(LoginUser.getPassword(), existingUser.get().getPassword())) {
-                // Generate JWT token
-                // String token = jwtTokenProvider.generateToken(existingUser.get().getEmail());
+
                 user user = userRepository.findByEmail(existingUser.get().getEmail());
                 String name = user.getFullName();
                 if(user.getType().equals("user")) {
@@ -107,11 +100,10 @@ public class Authcontroller {
    @PostMapping("/profile-completion")
 public ResponseEntity<?> completeProfile(@RequestBody Map<String, Object> request) {
   
-    // Extract email from incoming JSON (top-level key "email")
-    // System.out.println("Received profile completion request: " + request.toString());
+   
 
     String email = (String) request.get("email");
-    // System.out.println("Received profile completion request: " + request.toString());
+   
 
     if (email == null || email.isEmpty()) {
         return ResponseEntity.badRequest().body(new ApiResponse(false, "Email not provided"));
@@ -122,7 +114,6 @@ public ResponseEntity<?> completeProfile(@RequestBody Map<String, Object> reques
         return ResponseEntity.badRequest().body(new ApiResponse(false, "User not found"));
     }
 
-    // Extract other fields (simple casting - you might want validation/conversion)
     
     String dob = (String) request.get("dob");
     
@@ -158,10 +149,10 @@ public ResponseEntity<?> completeProfile(@RequestBody Map<String, Object> reques
             Optional.ofNullable(addrMap.get("zipCode")).orElse("")
         ).replaceAll(", +", ", ").trim();
     } else {
-        address = (String) request.get("address"); // fallback to flat address string
+        address = (String) request.get("address");
     }
 
-    // Build userdetails entity
+    
     userdetails details = new userdetails();
     details.setUser(userEntity);
     details.setPhoneNumber(phoneNumber);
@@ -180,7 +171,7 @@ public ResponseEntity<?> completeProfile(@RequestBody Map<String, Object> reques
 public ResponseEntity<?> postMethodName(@RequestBody Map<String, Object> request) {
     
     String email = (String) request.get("email");
-    // System.out.println("Received profile completion request: " + request.toString());
+  
 
     
     user userEntity = userRepository.findByEmail(email);
@@ -219,7 +210,7 @@ public ResponseEntity<?> postMethodName(@RequestBody Map<String, Object> request
             Optional.ofNullable(addrMap.get("zipCode")).orElse("")
         ).replaceAll(", +", ", ").trim();
     } else {
-        address = (String) request.get("fullAddress"); // fallback to flat address string
+        address = (String) request.get("fullAddress"); 
     }
 
 
@@ -280,7 +271,7 @@ public ResponseEntity<?> postMethodName(@RequestBody Map<String, Object> request
             Optional.ofNullable(contactMap.get("contactPhoneNumber")).orElse("")
         ).replaceAll(", +", ", ").trim();
     }else {
-        contact = (String) request.get("contactDetails"); // fallback to flat address string
+        contact = (String) request.get("contactDetails"); 
     }
 
     
@@ -309,7 +300,7 @@ public ResponseEntity<?> postMethodName(@RequestBody Map<String, Object> request
     serviceProvider.setAccountNumber(bankMap != null ? bankMap.get("accountNumber") : null);
     serviceProvider.setIfscCode(bankMap != null ? bankMap.get("ifscCode") : null);
 
-    // Save the service provider details
+    
     serviceproviders serviceProviderEntity = serviceprovidersrepository.save(serviceProvider);
     if (serviceProviderEntity == null) {
         return ResponseEntity
@@ -324,7 +315,7 @@ public ResponseEntity<?> postMethodName(@RequestBody Map<String, Object> request
 
     
 
-    // Simple ApiResponse DTO for messages
+    
     public static class ApiResponse {
         private boolean success;
         private String message;
@@ -338,7 +329,7 @@ public ResponseEntity<?> postMethodName(@RequestBody Map<String, Object> request
         public String getMessage() { return message; }
     }
 
-    // AuthResponse DTO for returning JWT token
+ 
     public static class AuthResponse {
         private String token;
 

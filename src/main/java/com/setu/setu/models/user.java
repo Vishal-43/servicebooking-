@@ -26,7 +26,7 @@ public class user {
     @PrimaryKeyJoinColumn // This annotation is crucial for shared primary key
     private userdetails userDetail;
 
-    @Column(nullable = false, columnDefinition = "varchar(255) default 'none'")
+   
     private String type;
 
 
@@ -34,10 +34,11 @@ public class user {
 
    }
 
-   public user(String fullName, String email, String password) {
+   public user(String fullName, String email, String password, String type) {
         this.fullName = fullName;
         this.email = email;
-        this.password = password	;
+        this.password = password;
+        this.type = type;
     }
 
     public Long getId() {
