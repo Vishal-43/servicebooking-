@@ -6,7 +6,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.MapsId;
-// import jakarta.persistence.OneToOne;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Id;
 
@@ -15,14 +14,13 @@ public class reviews {
    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-     // Assuming id is the primary key
-
+   
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "u_id") // foreign key column
+    @JoinColumn(name = "u_id") 
     private user user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "s_id") // foreign key column
+    @JoinColumn(name = "s_id") 
     private serviceproviders serviceProvider;
 
     
@@ -42,7 +40,7 @@ public class reviews {
         this.reviewDate = reviewDate;
         this.serviceProvider = serviceProvider;
     }
-    // Getters and setters
+   
     public Long getId() {
         return id;
     }
