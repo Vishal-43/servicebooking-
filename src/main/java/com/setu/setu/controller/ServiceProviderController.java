@@ -1,6 +1,5 @@
 package com.setu.setu.controller;
 
-// import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.setu.setu.controller.Authcontroller.ApiResponse;
@@ -148,7 +147,6 @@ public ResponseEntity<?> postMethodadd(@RequestBody Map<String, Object> entity) 
         return ResponseEntity.badRequest().body(new ApiResponse(false, "Service provider not found"));
     }
 
-    // Validate required fields before creating service entity if possible
     String serviceName = (String) entity.get("name");
     String description = (String) entity.get("description");
     String category = (String) entity.get("category");
@@ -179,7 +177,6 @@ public ResponseEntity<?> postMethodadd(@RequestBody Map<String, Object> entity) 
         return ResponseEntity.badRequest().body(new ApiResponse(false, "Service price is required"));
     }
 
-    // Create and save the service entity first
     services newService = new services();
     newService.setServiceName(serviceName);
     newService.setServiceDescription(description);
@@ -188,17 +185,14 @@ public ResponseEntity<?> postMethodadd(@RequestBody Map<String, Object> entity) 
     newService.setServicePrice(servicePrice);
     newService.setServiceProvider(provider);
 
-    // Save service first to generate primary key
     newService = servicereposiratory.save(newService);
 
-    // Process images only if present
    Object imagesObj = entity.get("images");
 if (imagesObj instanceof List<?>) {
     List<?> imagesList = (List<?>) imagesObj;
     for (Object imgObj : imagesList) {
         if (imgObj instanceof String) {
             String base64 = (String) imgObj;
-            // Remove data URL prefix if present
             if (base64.startsWith("data:")) {
                 base64 = base64.substring(base64.indexOf(",") + 1);
             }
@@ -206,7 +200,7 @@ if (imagesObj instanceof List<?>) {
                 byte[] bytes = Base64.getDecoder().decode(base64);
                 ServiceImage image = new ServiceImage();
                 image.setImageData(bytes);
-                image.setService(newService); // attach to your Service entity
+                image.setService(newService); 
                 serviceImageRepo.save(image);
             }
         }
@@ -252,7 +246,7 @@ if (imagesObj instanceof List<?>) {
         } else {
             return ResponseEntity.badRequest().body(new ApiResponse(false, "Service price is required"));
         }
-        // Update the service entity with new values
+     
         services existingService = service.get();
         existingService.setServiceName((String) entity.get("name"));
         existingService.setServiceDescription((String) entity.get("description"));
@@ -276,7 +270,7 @@ if (imagesObj instanceof List<?>) {
                 byte[] bytes = Base64.getDecoder().decode(base64);
                 ServiceImage image = new ServiceImage();
                 image.setImageData(bytes);
-                image.setService(existingService); // attach to your Service entity
+                image.setService(existingService); 
                 serviceImageRepo.save(image);
             }
         }
