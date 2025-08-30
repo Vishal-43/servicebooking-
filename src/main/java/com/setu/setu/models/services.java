@@ -21,15 +21,14 @@ public class services {
     
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "s_id") // foreign key column
+    @JoinColumn(name = "s_id")
     private serviceproviders serviceProvider;
     private String serviceName;
     private String serviceDescription;
     private double servicePrice;
-    private String status; // e.g., "active", "inactive", "pending"
+    private String status;
 
-    
-    private String serviceCategory; // e.g., "plumbing", "cleaning", etc.
+    private String serviceCategory;
 
     public services() {}
     public services(serviceproviders serviceProvider, String serviceName, String serviceDescription, double servicePrice,  String serviceCategory, String status) {
