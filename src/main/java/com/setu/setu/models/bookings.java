@@ -20,12 +20,8 @@ public class bookings {
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private Long id;
-    
-
-
 
     @ManyToOne(fetch = FetchType.LAZY)
-    
     @JoinColumn(name = "s_id")
     private serviceproviders serviceProvider;
 
@@ -43,10 +39,10 @@ public class bookings {
     
 
 
-    private String status; // e.g., "pending", "confirmed", "cancelled"
-    private String paymentStatus; // e.g., "paid", "unpaid"
-    private String paymentMethod; // e.g., "credit card", "cash", etc.
-    private String bookingDetails; // Additional details about the booking
+    private String status;
+    private String paymentStatus;
+    private String paymentMethod;
+    private String bookingDetails; 
     public bookings() {}
     public bookings(serviceproviders serviceProvider, LocalDateTime bookingdatetime,userdetails userDetails,services service, String status, String paymentStatus, String paymentMethod, String bookingDetails) {
         this.serviceProvider = serviceProvider;
