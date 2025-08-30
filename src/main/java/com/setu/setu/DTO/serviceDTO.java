@@ -10,7 +10,7 @@ public class serviceDTO {
     private Long id;
     private String name;
     private String description;
-    private List<String> imagesBase64; // Base64-encoded image strings
+    private List<String> imagesBase64;
     private String serviceCategory;
     private double servicePrice;
     private String status;
