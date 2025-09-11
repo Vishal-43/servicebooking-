@@ -253,7 +253,7 @@ const AdminDashboardHome = () => {
                 <div className="service-card"><h2>{stats.totalUsers}</h2><p>No. of Users</p></div>
                 <div className="service-card"><h2>{stats.totalServiceProviders}</h2><p>No. of Service Providers</p></div>
                 <div className="service-card"><h2>{stats.totalServices}</h2><p>Active Services</p></div>
-                <div className="service-card"><h2>{stats.totalReports}</h2><p>Reports Pending</p></div>
+                <div className="service-card"><h2>{stats.totalReports}</h2><p>Reports</p></div>
             </div>
         </div>
     );

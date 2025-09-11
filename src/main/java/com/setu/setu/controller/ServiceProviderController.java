@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import com.setu.setu.DTO.*;
 import java.time.LocalDateTime;
 import com.setu.setu.services.*;
+import com.setu.setu.models.user;
 
 
 
@@ -70,10 +71,11 @@ public class ServiceProviderController {
 	public ResponseEntity<?> postMethodhome(@RequestBody Map<String, Object> request) {
 		String email  = (String) request.get("email");
 		serviceproviders provider = serviceprovidersreposiratory.findByEmail(email);
-		if (provider == null) {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
+        
+        if (provider == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
 
-		}
+        }
 
 		long id = provider.getId();
 		List<bookings> bookings = bookingsreposiratory.findByServiceProvider_Id(id);

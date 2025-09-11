@@ -82,6 +82,14 @@ public class Authcontroller {
                 if(user.getType().equals("service_provider")) {
                     return ResponseEntity.ok(new loginresponce(true, "Login successful", existingUser.get().getId(), existingUser.get().getEmail(), false,name, existingUser.get().getType()));
                 }
+
+                if(user.getType().equals("admin")) {
+                    return ResponseEntity.ok(new loginresponce(true, "Login successful", existingUser.get().getId(), existingUser.get().getEmail(), true,name, existingUser.get().getType()));
+                }
+
+                if(user.getType().equals("none")) {
+                    return ResponseEntity.ok(new loginresponce(true, "Login successful", existingUser.get().getId(), existingUser.get().getEmail(), true,name, existingUser.get().getType()));
+                }
             } else {
                 return ResponseEntity
                     .badRequest()

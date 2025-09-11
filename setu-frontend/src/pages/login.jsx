@@ -44,6 +44,9 @@ const LoginPage = () => {
         }else if(data.type === "service_provider"){
           window.location.href = "/service-provider"; 
           return null;
+        }else if(data.type === "admin"){
+          window.location.href = "/admin"; 
+          return null;
         }else{
           window.location.href = "/role-selection"; 
         }

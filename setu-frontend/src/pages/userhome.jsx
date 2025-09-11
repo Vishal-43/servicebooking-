@@ -443,6 +443,7 @@ const UserHomeTab = ({ userdata }) => {
 const [showBookingModal, setShowBookingModal] = React.useState(false);
 const [redirectToLogin, setRedirectToLogin] = useState(false);
 
+
 const openBooking = (service) => {
   setSelectedService(service);
   setShowBookingModal(true);
@@ -485,8 +486,15 @@ const submitBooking = async (bookingData) => {
     }
         if (!res.ok) throw new Error("Failed to load services");
         const data = await res.json();
-        setServices(data);
-       
+        console.log("Fetched user data:", data); // Debug: log the response
+        // Try to handle both cases: data.services or data itself is an array
+        if (Array.isArray(data.services)) {
+          setServices(data.services);
+        } else if (Array.isArray(data)) {
+          setServices(data);
+        } else {
+          setServices([]);
+        }
       } catch (err) {
         setError(err.message);
       } finally {
