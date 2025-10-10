@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useEffect } from 'react';
+import API_BASE_URL from '../config';
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -22,7 +23,7 @@ const LoginPage = () => {
     try {
       setMessage("Logging in...");
       setMessageType("");
-      const response = await fetch("http://localhost:8080/api/auth/login", {
+      const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include", // important to receive HttpOnly cookie

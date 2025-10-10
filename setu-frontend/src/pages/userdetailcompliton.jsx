@@ -91,16 +91,16 @@ const UserDetailsPage = () => {
         email,
         phoneNumber,
         dob,
-       
+
         address: [
-      flatHouseNo,
-      roomNo ? `Room ${roomNo}` : "",
-      street,
-      area,
-      city,
-      state,
-      zipCode
-    ].filter(Boolean).join(", "),
+          flatHouseNo,
+          roomNo ? `Room ${roomNo}` : "",
+          street,
+          area,
+          city,
+          state,
+          zipCode
+        ].filter(Boolean).join(", "),
       };
 
       const response = await fetch("http://localhost:8080/api/auth/profile-completion", {
@@ -312,9 +312,8 @@ const UserDetailsPage = () => {
             </p>
             {message && (
               <div
-                className={`message-box ${messageType} ${
-                  message ? "show" : ""
-                }`}
+                className={`message-box ${messageType} ${message ? "show" : ""
+                  }`}
               >
                 {message}
               </div>

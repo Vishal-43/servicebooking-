@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Navigate } from "react-router-dom";
 import AdminUsersProvidersTable from "./displayuser";
 import { FaCheckCircle, FaClock } from "react-icons/fa";
+import API_BASE_URL from '../config';
 
 const GlobalStyles = () => (
     <style>
@@ -220,7 +221,7 @@ const AdminDashboardHome = () => {
         async function fetchStats() {
             setLoading(true);
             try {
-                const res = await fetch("http://localhost:8080/api/admin/stats", {
+                const res = await fetch(`${API_BASE_URL}/api/admin/stats`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
 
@@ -268,8 +269,8 @@ const AdminUsersTab = () => {
     const [message, setMessage] = useState("");
     useEffect(() => {
         async function fetchAll() {
-            const resU = await fetch("http://localhost:8080/api/admin/users", { method: "post", headers: { "Content-Type": "application/json" }, body: JSON.stringify(userdata), credentials: "include" });
-            const resP = await fetch("http://localhost:8080/api/admin/serviceproviders", { method: "post", headers: { "Content-Type": "application/json" }, body: JSON.stringify(userdata), credentials: "include" });
+            const resU = await fetch(`${API_BASE_URL}/api/admin/users`, { method: "post", headers: { "Content-Type": "application/json" }, body: JSON.stringify(userdata), credentials: "include" });
+            const resP = await fetch(`${API_BASE_URL}/api/admin/serviceproviders`, { method: "post", headers: { "Content-Type": "application/json" }, body: JSON.stringify(userdata), credentials: "include" });
             setUsers(await resU.json());
             setProviders(await resP.json());
         }
@@ -310,13 +311,13 @@ const AdminReportsTab = () => {
     const [reports, setReports] = useState([]);
     useEffect(() => {
         async function fetchReports() {
-            const res = await fetch("http://localhost:8080/api/admin/reports", { method: "post", headers: { "Content-Type": "application/json" }, body: JSON.stringify(userdata), credentials: "include" });
+            const res = await fetch(`${API_BASE_URL}/api/admin/reports`, { method: "post", headers: { "Content-Type": "application/json" }, body: JSON.stringify(userdata), credentials: "include" });
             setReports(await res.json());
         }
         fetchReports();
     }, []);
     const updateStatus = async (id, status) => {
-        await fetch(`http://localhost:8080/api/admin/reports/status`, {
+        await fetch(`${API_BASE_URL}/api/admin/reports/status`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ status,id }),
@@ -431,7 +432,7 @@ const AdminServicesTab = () => {
     const [services, setServices] = useState([]);
     useEffect(() => {
         async function fetchServices() {
-            const res = await fetch("http://localhost:8080/api/admin/services", {method:"post",headers: { "Content-Type": "application/json" },body: JSON.stringify(userdata), credentials: "include" });
+            const res = await fetch(`${API_BASE_URL}/api/admin/services`, {method:"post",headers: { "Content-Type": "application/json" },body: JSON.stringify(userdata), credentials: "include" });
             setServices(await res.json());
         }
         fetchServices();
