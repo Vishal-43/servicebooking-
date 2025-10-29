@@ -19,7 +19,7 @@ import com.setu.setu.DTO.loginresponce;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true") 
+@CrossOrigin(origins = {"http://localhost:3000", "https://*.up.railway.app", "https://*.railway.app"}, allowCredentials = "true") 
 public class Authcontroller {
 
     @Autowired

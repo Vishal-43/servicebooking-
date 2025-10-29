@@ -41,7 +41,7 @@ import com.setu.setu.models.user;
 
 @RestController
 @RequestMapping("/api/service-provider")
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
+@CrossOrigin(origins = {"http://localhost:3000", "https://*.up.railway.app", "https://*.railway.app"}, allowCredentials = "true")
 public class ServiceProviderController {
 	@Autowired
 	private serviceprovidersreposiratory serviceprovidersreposiratory;

@@ -17,7 +17,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/user")
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
+@CrossOrigin(origins = {"http://localhost:3000", "https://*.up.railway.app", "https://*.railway.app"}, allowCredentials = "true")
 public class UserController {
     @Autowired
     private servicesservice servicesservice;
