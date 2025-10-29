@@ -39,3 +39,6 @@ package.json
 package-lock.json
 
 /src/main/java/com/setu/setu/config/AdminDataInitializer.java
+
+src/main/resources/application.properties
+src/main/resources/application.properties
