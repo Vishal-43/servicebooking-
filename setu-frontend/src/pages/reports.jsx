@@ -17,7 +17,7 @@ const ReportsTab = ({ userdata }) => {
     async function fetchReports() {
       try {
         setLoading(true);
-        const res = await fetch("http://localhost:8080/api/service-provider/reports", {
+        const res = await fetch("/api/service-provider/reports", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(userdata),
@@ -42,7 +42,7 @@ const ReportsTab = ({ userdata }) => {
     if (!newReport.trim()) return;
     setSubmitting(true);
     try {
-      const res = await fetch("http://localhost:8080/api/service-provider/reports/add", {
+      const res = await fetch("/api/service-provider/reports/add", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...userdata, report: newReport }),

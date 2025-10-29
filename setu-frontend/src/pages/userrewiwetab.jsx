@@ -15,7 +15,7 @@ const UserReviewsTab = ({ userdata }) => {
     async function fetchReviews() {
       try {
         setLoading(true);
-        const res = await fetch("http://localhost:8080/api/user/reviews", {
+        const res = await fetch("/api/user/reviews", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email: userdata.email }),

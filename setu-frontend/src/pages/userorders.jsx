@@ -26,7 +26,7 @@ const UserOrdersTab = ({ userdata }) => {
     async function fetchOrders() {
       try {
         setLoading(true);
-        const res = await fetch("http://localhost:8080/api/user/orders", {
+        const res = await fetch("/api/user/orders", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email: userdata.email }),
@@ -58,7 +58,7 @@ const UserOrdersTab = ({ userdata }) => {
 
   // You may want to refresh orders after review submission in a real app!
   const handleReviewSubmit = async (reviewData) => {
-    const res = await fetch("http://localhost:8080/api/user/review", {
+    const res = await fetch("/api/user/review", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(reviewData),

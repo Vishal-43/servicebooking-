@@ -13,7 +13,7 @@ const OrdersTab = ({ userdata }) => {
     async function fetchOrders() {
       try {
         setLoading(true);
-        const res = await fetch("http://localhost:8080/api/service-provider/bookings", {
+        const res = await fetch("/api/service-provider/bookings", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(userdata),
@@ -36,7 +36,7 @@ const OrdersTab = ({ userdata }) => {
   // Change order status
   const handleStatusChange = async (orderId, status) => {
     try {
-      const res = await fetch(`http://localhost:8080/api/service-provider/orders/status`, {
+      const res = await fetch(`/api/service-provider/orders/status`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id: orderId, status }),
@@ -56,7 +56,7 @@ const OrdersTab = ({ userdata }) => {
   // Change payment status
   const handlePaymentChange = async (orderId, paymentStatus) => {
     try {
-      const res = await fetch(`http://localhost:8080/api/service-provider/orders/payment-status`, {
+      const res = await fetch(`/api/service-provider/orders/payment-status`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id: orderId, paymentStatus }),

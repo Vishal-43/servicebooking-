@@ -35,7 +35,7 @@ const Signup = () => {
     setMessageType('');
 
     // Call your backend API
-    const response = await fetch('http://localhost:8080/api/auth/signup' 
+    const response = await fetch('/api/auth/signup' 
 , {
       method: 'POST',
       headers: {

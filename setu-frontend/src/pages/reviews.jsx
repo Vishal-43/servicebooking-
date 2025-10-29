@@ -20,7 +20,7 @@ const ReviewsSummary = ({ userdata }) => {
     async function fetchReviews() {
       try {
         setLoading(true);
-        const res = await fetch("http://localhost:8080/api/service-provider/reviews", {
+        const res = await fetch("/api/service-provider/reviews", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(userdata),

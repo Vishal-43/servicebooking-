@@ -279,7 +279,7 @@ const AdminUsersTab = () => {
     const makeAdmin = async (e) => {
         e.preventDefault();
         setMessage("Processing...");
-        const res = await fetch("http://localhost:8080/api/admin/makeadmin", {
+        const res = await fetch("/api/admin/makeadmin", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email }),
@@ -438,7 +438,7 @@ const AdminServicesTab = () => {
         fetchServices();
     }, []);
     const toggleActive = async (id, isActive) => {
-        await fetch(`http://localhost:8080/api/admin/services/status`, {
+        await fetch(`/api/admin/services/status`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ active: !isActive, id }),

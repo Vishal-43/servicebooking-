@@ -458,7 +458,7 @@ const submitBooking = async (bookingData) => {
   const req = { ...bookingData, userEmail: userdata.email };
   ;
   
-  const res = await fetch("http://localhost:8080/api/user/book", {
+  const res = await fetch("/api/user/book", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(req),
@@ -474,7 +474,7 @@ const submitBooking = async (bookingData) => {
     async function fetchActiveServices() {
       try {
         setLoading(true);
-        const res = await fetch("http://localhost:8080/api/user/me", {
+        const res = await fetch("/api/user/me", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(userdata),

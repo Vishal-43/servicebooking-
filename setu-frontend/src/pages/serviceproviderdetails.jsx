@@ -140,7 +140,7 @@ const ServiceProviderPage = () => {
     };
 
     try {
-      const response = await fetch("http://localhost:8080/api/auth/provider-registration", {
+      const response = await fetch("/api/auth/provider-registration", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include", // Remove if not using cookies/JWT

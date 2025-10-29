@@ -299,7 +299,7 @@ const MyServicesPage = ({ userdata }) => {
       setError(null);
       try {
         const res = await fetch(
-          "http://localhost:8080/api/service-provider/services",
+          "/api/service-provider/services",
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -322,7 +322,7 @@ const MyServicesPage = ({ userdata }) => {
 
   const handleAddService = async (form) => {
     try {
-      const res = await fetch("http://localhost:8080/api/service-provider/add", {
+      const res = await fetch("/api/service-provider/add", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...form, ...userdata }),
@@ -339,7 +339,7 @@ const MyServicesPage = ({ userdata }) => {
 
   const handleEditService = async (form) => {
     try {
-      const res = await fetch("http://localhost:8080/api/service-provider/edit", {
+      const res = await fetch("/api/service-provider/edit", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
@@ -360,7 +360,7 @@ const MyServicesPage = ({ userdata }) => {
     try {
       const service = services.find((s) => s.id === id);
       const newStatus = service.status === "Active" ? "Deactivated" : "Active";
-      const res = await fetch("http://localhost:8080/api/service-provider/status", {
+      const res = await fetch("/api/service-provider/status", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id, status: newStatus }),
@@ -379,7 +379,7 @@ const MyServicesPage = ({ userdata }) => {
   const handleDeleteService = async (id) => {
     if (!window.confirm("Are you sure you want to delete this service?")) return;
     try {
-      const res = await fetch("http://localhost:8080/api/service-provider/delete", {
+      const res = await fetch("/api/service-provider/delete", {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id }),

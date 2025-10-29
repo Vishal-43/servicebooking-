@@ -22,7 +22,7 @@ const UserReportsTab = ({ userdata }) => {
     async function fetchReports() {
       try {
         setLoading(true);
-        const res = await fetch("http://localhost:8080/api/user/reports", {
+        const res = await fetch("/api/user/reports", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email: userdata.email }),
@@ -45,7 +45,7 @@ const UserReportsTab = ({ userdata }) => {
     e.preventDefault();
     setSubmittingReport(true);
     try {
-      const res = await fetch("http://localhost:8080/api/user/reports/submit", {
+      const res = await fetch("/api/user/reports/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

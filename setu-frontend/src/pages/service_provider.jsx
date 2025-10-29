@@ -501,7 +501,7 @@ const HomeTab = ({ userdata }) => {
       setLoading(true);
       setError(null);
       try {
-        const response = await fetch("http://localhost:8080/api/service-provider/home", {
+        const response = await fetch("/api/service-provider/home", {
   method: "POST",
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify(userdata),

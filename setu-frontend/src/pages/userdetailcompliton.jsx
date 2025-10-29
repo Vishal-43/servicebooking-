@@ -103,7 +103,7 @@ const UserDetailsPage = () => {
         ].filter(Boolean).join(", "),
       };
 
-      const response = await fetch("http://localhost:8080/api/auth/profile-completion", {
+      const response = await fetch("/api/auth/profile-completion", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
