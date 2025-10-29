@@ -1,8 +1,6 @@
 package com.setu.setu.controller;
 
-import org.springframework.web.bind.annotation.RestController;
-
-import com.setu.setu.controller.Authcontroller.ApiResponse;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import com.setu.setu.models.*;
 import com.setu.setu.reposoratory.bookingsreposiratory;
 import com.setu.setu.reposoratory.reviewsreposiratory;
@@ -40,6 +38,7 @@ import com.setu.setu.models.user;
 
 @RestController
 @RequestMapping("/api/service-provider")
+@CrossOrigin(origins = {"http://localhost:3000", "https://servicebooking.up.railway.app"}, allowCredentials = "true")
 public class ServiceProviderController {
 	@Autowired
 	private serviceprovidersreposiratory serviceprovidersreposiratory;
