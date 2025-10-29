@@ -23,7 +23,6 @@ import com.setu.setu.reposoratory.bookingimagereposiraotry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -41,7 +40,6 @@ import com.setu.setu.models.user;
 
 @RestController
 @RequestMapping("/api/service-provider")
-@CrossOrigin(origins = {"http://localhost:3000", "https://*.up.railway.app", "https://*.railway.app"}, allowCredentials = "true")
 public class ServiceProviderController {
 	@Autowired
 	private serviceprovidersreposiratory serviceprovidersreposiratory;
